@@ -47,3 +47,48 @@ chinstrap %>%
   )
 ```
 
+get vectors of body_mass_g for M/F
+
+```{r}
+chinstrap_f<-chinstrap %>% 
+  filter(sex== "female") %>% 
+  pull(body_mass_g)
+
+
+chinstrap_m<-chinstrap %>% 
+  filter(sex== "male") %>% 
+  pull(body_mass_g)
+```
+
+### 2 sample T test
+
+1. is there a significant difference between male and female body mass?
+
+```{r}
+chinstrap_ttest<-t.test(chinstrap_f, chinstrap_m)
+
+chinstrap_ttest
+
+cohen.d(chinstrap_f, chinstrap_m)
+```
+
+
+are male chinstraps significantly larger then female chinstraps
+
+```{r}
+t.test(chinstrap_m,chinstrap_f, alternative = "greater")
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
