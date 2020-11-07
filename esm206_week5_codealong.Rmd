@@ -80,6 +80,88 @@ t.test(chinstrap_m,chinstrap_f, alternative = "greater")
 ```
 
 
+### One-way anova
+
+table of counts by species and sex
+```{r}
+penguins_count<-penguins %>% 
+  count(species,sex)
+```
+
+create subset of F penguins
+
+```{r}
+penguin_f<-penguins %>% 
+  filter(sex=="female")
+```
+
+
+```{r}
+ggplot(data = penguin_f, aes(x=flipper_length_mm))+
+  geom_histogram(aes(fill=species))+
+  facet_wrap(~species, scales="free")
+```
+
+
+```{r}
+ggplot(data = penguin_f, aes(sample=flipper_length_mm))+
+  geom_qq(aes(color=species))+
+  facet_wrap(~species, scales="free")
+```
+
+
+## summary stats
+
+```{r}
+penguin_f_summary <- penguin_f %>% 
+  group_by(species) %>% 
+  summarize(
+    mean_flipper_length=mean(flipper_length_mm),
+    sd_flipper_length=sd(flipper_length_mm),
+    sample_size=n(),
+    var_flipper_length=var(flipper_length_mm),
+    se_flipper_length=sd(flipper_length_mm)/sqrt(n()))
+
+leveneTest(flipper_length_mm~species, data=penguin_f)
+    
+```
+
+
+### beeswarm plot with me +- 1 sd
+
+```{r}
+ggplot()+geom_beeswarm(data=penguin_f,
+                       aes(x=species,
+                           y=flipper_length_mm),
+                       color="darkblue",
+                       size=3,
+                       alpha=.25)+
+  geom_point(data=penguin_f_summary,
+             aes(x=species, y=mean_flipper_length),
+             size=4.5)+
+  geom_errorbar(data=penguin_f_summary, aes(x=species,
+                                            ymax=mean_flipper_length+sd_flipper_length,
+                                            ymin=mean_flipper_length-sd_flipper_length),
+                width=.1)+
+  theme_bw()
+```
+
+##one-way anove
+
+```{r}
+penguin_aov<-aov(flipper_length_mm ~species, data=penguin_f)
+summary(penguin_aov)
+
+TukeyHSD(penguin_aov)
+```
+### type III anova with carpackage
+
+```{r}
+penguin_lm<-lm(flipper_length_mm~species, data=penguins_f)
+
+penguin_aov_t3<-Anova(penguin_lm, type="III")
+penguin_aov_t3
+```
 
 
 
