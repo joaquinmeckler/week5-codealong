@@ -1,0 +1,49 @@
+---
+title: "Week 5 code along_penguin size"
+author: "Joaquin Meckler"
+date: "11/7/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(palmerpenguins)
+library(effsize)
+library(broom)
+library(ggbeeswarm)
+library(car)
+```
+
+## T-Tests
+
+mass: comparison between male and female penguins
+
+```{r}
+chinstrap<-penguins %>% 
+  filter(species=="Chinstrap")
+
+# Histograms
+
+ggplot(data=chinstrap, aes(x=body_mass_g))+
+  geom_histogram(bins=10)+
+  facet_wrap(~sex)
+
+# QQ plot
+
+ggplot(data=chinstrap, aes(sample = body_mass_g))+
+  geom_qq()+
+  facet_wrap(~sex)
+
+# discriptive statistics
+
+chinstrap %>% 
+  group_by(sex) %>% 
+  summarize(
+    mean_mass=mean(body_mass_g),
+    median_mass=median(body_mass_g),
+    sd_mass=sd(body_mass_g),
+    sample_size=n()
+  )
+```
+
