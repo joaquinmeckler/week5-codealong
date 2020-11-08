@@ -157,10 +157,11 @@ TukeyHSD(penguin_aov)
 ### type III anova with carpackage
 
 ```{r}
-penguin_lm<-lm(flipper_length_mm~species, data=penguins_f)
 
+penguin_lm<-lm(flipper_length_mm~species, data=penguin_f)
 penguin_aov_t3<-Anova(penguin_lm, type="III")
 penguin_aov_t3
+
 ```
 
 
